@@ -1,5 +1,4 @@
 import pytest
-
 import salt.modules.freezer as freezer
 from salt.exceptions import CommandExecutionError
 

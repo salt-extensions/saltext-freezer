@@ -5,7 +5,6 @@ Module for freezer
 :depends:       None
 :platform:      Linux
 """
-
 import logging
 import os
 
@@ -49,8 +48,8 @@ def _paths(name=None):
     name = "freezer" if not name else name
     states_path = _states_path()
     return (
-        os.path.join(states_path, "{}-pkgs.yml".format(name)),
-        os.path.join(states_path, "{}-reps.yml".format(name)),
+        os.path.join(states_path, f"{name}-pkgs.yml"),
+        os.path.join(states_path, f"{name}-reps.yml"),
     )
 
 
@@ -132,10 +131,10 @@ def freeze(name=None, force=False, **kwargs):
     try:
         if not os.path.exists(states_path):
             os.makedirs(states_path)
-    except OSError as e:
+    except OSError as exc:
         msg = "Error when trying to create the freezer storage %s: %s"
-        log.error(msg, states_path, e)
-        raise CommandExecutionError(msg % (states_path, e))
+        log.error(msg, states_path, exc)
+        raise CommandExecutionError(msg % (states_path, exc)) from exc
 
     if status(name) and not force:
         raise CommandExecutionError(

@@ -8,5 +8,3 @@ _____________
 
 .. autosummary::
     :toctree:
-
-    freezer_mod

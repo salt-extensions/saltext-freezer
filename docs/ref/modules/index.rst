@@ -10,4 +10,3 @@ _________________
     :toctree:
 
     freezer
-    freezer_mod

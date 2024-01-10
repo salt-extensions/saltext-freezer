@@ -1,5 +1,6 @@
+from unittest.mock import patch
+
 import salt.modules.freezer as freezer
-from tests.support.mock import patch
 
 
 def test_compare(states, temp_salt_minion, tmp_path):
@@ -64,18 +65,10 @@ def test_compare(states, temp_salt_minion, tmp_path):
     new_pkgs = {"adduser": "3.118", "consul": "1.11.1"}
 
     # Mock up freeze files
-    states.file.serialize(
-        name=old_pkg_file, dataset=old_pkgs, serializer="json", makedirs=True
-    )
-    states.file.serialize(
-        name=new_pkg_file, dataset=new_pkgs, serializer="json", makedirs=True
-    )
-    states.file.serialize(
-        name=old_rep_file, dataset=old_reps, serializer="json", makedirs=True
-    )
-    states.file.serialize(
-        name=new_rep_file, dataset=new_reps, serializer="json", makedirs=True
-    )
+    states.file.serialize(name=old_pkg_file, dataset=old_pkgs, serializer="json", makedirs=True)
+    states.file.serialize(name=new_pkg_file, dataset=new_pkgs, serializer="json", makedirs=True)
+    states.file.serialize(name=old_rep_file, dataset=old_reps, serializer="json", makedirs=True)
+    states.file.serialize(name=new_rep_file, dataset=new_reps, serializer="json", makedirs=True)
 
     # Compare
     with patch("salt.modules.freezer.__opts__", opts, create=True):

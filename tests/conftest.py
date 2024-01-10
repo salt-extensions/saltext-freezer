@@ -29,6 +29,36 @@ def salt_factories_config():
     }
 
 
+@pytest.fixture
+def temp_salt_master(
+    request,
+    salt_factories,
+):
+    config_defaults = {
+        "open_mode": True,
+    }
+    factory = salt_factories.salt_master_daemon(
+        random_string("temp-master-"),
+        defaults=config_defaults,
+        extra_cli_arguments_after_first_start_failure=["--log-level=info"],
+    )
+    return factory
+
+
+@pytest.fixture
+def temp_salt_minion(temp_salt_master):
+    config_defaults = {
+        "open_mode": True,
+    }
+    factory = temp_salt_master.salt_minion_daemon(
+        random_string("temp-minion-"),
+        defaults=config_defaults,
+        extra_cli_arguments_after_first_start_failure=["--log-level=info"],
+    )
+    factory.after_terminate(pytest.helpers.remove_stale_minion_key, temp_salt_master, factory.id)
+    return factory
+
+
 @pytest.fixture(scope="package")
 def master(salt_factories):
     return salt_factories.salt_master_daemon(random_string("master-"))
