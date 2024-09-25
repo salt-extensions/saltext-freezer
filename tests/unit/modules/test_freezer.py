@@ -2,6 +2,7 @@
 :maintainer:    Alberto Planas <aplanas@suse.com>
 :platform:      Linux
 """
+
 from unittest.mock import MagicMock
 from unittest.mock import patch
 
@@ -95,7 +96,10 @@ def test_freeze_success_two_freeze():
     with patch.dict(freezer.__salt__, salt_mock), patch(
         "salt.modules.freezer.status",
         MagicMock(return_value=False),
-    ), patch("salt.utils.json.dump", dump), patch("salt.modules.freezer.fopen", fopen,), patch(
+    ), patch("salt.utils.json.dump", dump), patch(
+        "salt.modules.freezer.fopen",
+        fopen,
+    ), patch(
         "os.makedirs", makedirs
     ):
         assert freezer.freeze("one")
@@ -123,7 +127,10 @@ def test_freeze_success_new_state():
     with patch.dict(freezer.__salt__, salt_mock), patch(
         "salt.modules.freezer.status",
         MagicMock(return_value=False),
-    ), patch("salt.utils.json.dump", dump), patch("salt.modules.freezer.fopen", fopen,), patch(
+    ), patch("salt.utils.json.dump", dump), patch(
+        "salt.modules.freezer.fopen",
+        fopen,
+    ), patch(
         "os.makedirs", makedirs
     ):
         assert freezer.freeze()
@@ -149,7 +156,10 @@ def test_freeze_success_force():
     with patch.dict(freezer.__salt__, salt_mock), patch(
         "salt.modules.freezer.status",
         MagicMock(return_value=False),
-    ), patch("salt.utils.json.dump", dump), patch("salt.modules.freezer.fopen", fopen,), patch(
+    ), patch("salt.utils.json.dump", dump), patch(
+        "salt.modules.freezer.fopen",
+        fopen,
+    ), patch(
         "os.makedirs", makedirs
     ):
         assert freezer.freeze(force=True)
@@ -309,7 +319,10 @@ def test_restore_clean_yml():
     with patch.dict(freezer.__salt__, salt_mock), patch(
         "salt.modules.freezer.status",
         MagicMock(return_value=True),
-    ), patch("salt.utils.json.load", load), patch("salt.modules.freezer.fopen", fopen,), patch(
+    ), patch("salt.utils.json.load", load), patch(
+        "salt.modules.freezer.fopen",
+        fopen,
+    ), patch(
         "os.remove", remove
     ):
         assert freezer.restore(clean=True) == {

@@ -5,6 +5,7 @@ Module for freezer
 :depends:       None
 :platform:      Linux
 """
+
 import logging
 import os
 
