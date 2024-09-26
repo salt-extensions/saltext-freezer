@@ -1,14 +1,14 @@
 from unittest.mock import patch
 
-import salt.modules.freezer as freezer
+from saltext.freezer.modules import freezer
 
 
-def test_compare(states, temp_salt_minion, tmp_path):
+def test_compare(states, minion, tmp_path):
     """
     Test freezer.compare
     """
     # Default options
-    opts = temp_salt_minion.config.copy()
+    opts = minion.config.copy()
 
     # Set cachedir
     cachedir = tmp_path / "__salt_test_freezer_cache_dir/minion"
@@ -71,7 +71,7 @@ def test_compare(states, temp_salt_minion, tmp_path):
     states.file.serialize(name=new_rep_file, dataset=new_reps, serializer="json", makedirs=True)
 
     # Compare
-    with patch("salt.modules.freezer.__opts__", opts, create=True):
+    with patch("saltext.freezer.modules.freezer.__opts__", opts, create=True):
         ret = freezer.compare(old="pre_install", new="post_install")
 
     assert ret["pkgs"]["new"]["consul"] == "1.11.1"

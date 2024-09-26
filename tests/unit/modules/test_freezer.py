@@ -7,8 +7,9 @@ from unittest.mock import MagicMock
 from unittest.mock import patch
 
 import pytest
-import salt.modules.freezer as freezer
 from salt.exceptions import CommandExecutionError
+
+from saltext.freezer.modules import freezer
 
 
 @pytest.fixture
@@ -73,7 +74,7 @@ def test_freeze_fails_already_frozen():
     """
     # Fails when there is already a frozen state
     makedirs = MagicMock()
-    with patch("salt.modules.freezer.status", MagicMock(return_value=True)), patch(
+    with patch("saltext.freezer.modules.freezer.status", MagicMock(return_value=True)), patch(
         "os.makedirs", makedirs
     ):
         with pytest.raises(CommandExecutionError):
@@ -94,10 +95,10 @@ def test_freeze_success_two_freeze():
     dump = MagicMock()
     makedirs = MagicMock()
     with patch.dict(freezer.__salt__, salt_mock), patch(
-        "salt.modules.freezer.status",
+        "saltext.freezer.modules.freezer.status",
         MagicMock(return_value=False),
     ), patch("salt.utils.json.dump", dump), patch(
-        "salt.modules.freezer.fopen",
+        "saltext.freezer.modules.freezer.fopen",
         fopen,
     ), patch(
         "os.makedirs", makedirs
@@ -125,10 +126,10 @@ def test_freeze_success_new_state():
     dump = MagicMock()
     makedirs = MagicMock()
     with patch.dict(freezer.__salt__, salt_mock), patch(
-        "salt.modules.freezer.status",
+        "saltext.freezer.modules.freezer.status",
         MagicMock(return_value=False),
     ), patch("salt.utils.json.dump", dump), patch(
-        "salt.modules.freezer.fopen",
+        "saltext.freezer.modules.freezer.fopen",
         fopen,
     ), patch(
         "os.makedirs", makedirs
@@ -154,10 +155,10 @@ def test_freeze_success_force():
     dump = MagicMock()
     makedirs = MagicMock()
     with patch.dict(freezer.__salt__, salt_mock), patch(
-        "salt.modules.freezer.status",
+        "saltext.freezer.modules.freezer.status",
         MagicMock(return_value=False),
     ), patch("salt.utils.json.dump", dump), patch(
-        "salt.modules.freezer.fopen",
+        "saltext.freezer.modules.freezer.fopen",
         fopen,
     ), patch(
         "os.makedirs", makedirs
@@ -175,7 +176,7 @@ def test_restore_fails_missing_state():
     Test to restore an old state
     """
     # Fails if the state is not found
-    with patch("salt.modules.freezer.status", MagicMock(return_value=False)):
+    with patch("saltext.freezer.modules.freezer.status", MagicMock(return_value=False)):
         with pytest.raises(CommandExecutionError):
             freezer.restore()
 
@@ -193,10 +194,10 @@ def test_restore_add_missing_repo():
     fopen = MagicMock()
     load = MagicMock(side_effect=[{}, {"missing-repo": {}}])
     with patch.dict(freezer.__salt__, salt_mock), patch(
-        "salt.modules.freezer.status",
+        "saltext.freezer.modules.freezer.status",
         MagicMock(return_value=True),
     ), patch("salt.utils.json.load", load), patch(
-        "salt.modules.freezer.fopen",
+        "saltext.freezer.modules.freezer.fopen",
         fopen,
     ):
         assert freezer.restore() == {
@@ -224,10 +225,10 @@ def test_restore_add_missing_package():
         "pkg.install": MagicMock(),
     }
     with patch.dict(freezer.__salt__, salt_mock), patch(
-        "salt.modules.freezer.status",
+        "saltext.freezer.modules.freezer.status",
         MagicMock(return_value=True),
     ), patch("salt.utils.json.load", load), patch(
-        "salt.modules.freezer.fopen",
+        "saltext.freezer.modules.freezer.fopen",
         fopen,
     ):
         assert freezer.restore() == {
@@ -255,10 +256,10 @@ def test_restore_remove_extra_package():
     fopen = MagicMock()
     load = MagicMock(side_effect=[{}, {}])
     with patch.dict(freezer.__salt__, salt_mock), patch(
-        "salt.modules.freezer.status",
+        "saltext.freezer.modules.freezer.status",
         MagicMock(return_value=True),
     ), patch("salt.utils.json.load", load), patch(
-        "salt.modules.freezer.fopen",
+        "saltext.freezer.modules.freezer.fopen",
         fopen,
     ):
         assert freezer.restore() == {
@@ -286,10 +287,10 @@ def test_restore_remove_extra_repo():
     fopen = MagicMock()
     load = MagicMock(side_effect=[{}, {}])
     with patch.dict(freezer.__salt__, salt_mock), patch(
-        "salt.modules.freezer.status",
+        "saltext.freezer.modules.freezer.status",
         MagicMock(return_value=True),
     ), patch("salt.utils.json.load", load), patch(
-        "salt.modules.freezer.fopen",
+        "saltext.freezer.modules.freezer.fopen",
         fopen,
     ):
         assert freezer.restore() == {
@@ -317,10 +318,10 @@ def test_restore_clean_yml():
     load = MagicMock()
     remove = MagicMock()
     with patch.dict(freezer.__salt__, salt_mock), patch(
-        "salt.modules.freezer.status",
+        "saltext.freezer.modules.freezer.status",
         MagicMock(return_value=True),
     ), patch("salt.utils.json.load", load), patch(
-        "salt.modules.freezer.fopen",
+        "saltext.freezer.modules.freezer.fopen",
         fopen,
     ), patch(
         "os.remove", remove
