@@ -5,12 +5,13 @@ Module for freezer
 :depends:       None
 :platform:      Linux
 """
+
 import logging
 import os
 
 import salt.utils.dictdiffer
-import salt.utils.json as json
 from salt.exceptions import CommandExecutionError
+from salt.utils import json
 from salt.utils.args import clean_kwargs
 from salt.utils.files import fopen
 
