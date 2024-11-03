@@ -37,22 +37,26 @@ def test_list():
         assert freezer.list_() == []
 
     # There is freezer directory, but is empty
-    with patch("os.path.isdir", MagicMock(return_value=True)), patch(
-        "os.listdir", MagicMock(return_value=[])
+    with (
+        patch("os.path.isdir", MagicMock(return_value=True)),
+        patch("os.listdir", MagicMock(return_value=[])),
     ):
         assert freezer.list_() == []
 
     # There is freezer directory with states
-    with patch("os.path.isdir", MagicMock(return_value=True)), patch(
-        "os.listdir",
-        MagicMock(
-            return_value=[
-                "freezer-pkgs.yml",
-                "freezer-reps.yml",
-                "state-pkgs.yml",
-                "state-reps.yml",
-                "random-file",
-            ]
+    with (
+        patch("os.path.isdir", MagicMock(return_value=True)),
+        patch(
+            "os.listdir",
+            MagicMock(
+                return_value=[
+                    "freezer-pkgs.yml",
+                    "freezer-reps.yml",
+                    "state-pkgs.yml",
+                    "state-reps.yml",
+                    "random-file",
+                ]
+            ),
         ),
     ):
         assert freezer.list_() == ["freezer", "state"]
@@ -74,8 +78,9 @@ def test_freeze_fails_already_frozen():
     """
     # Fails when there is already a frozen state
     makedirs = MagicMock()
-    with patch("saltext.freezer.modules.freezer.status", MagicMock(return_value=True)), patch(
-        "os.makedirs", makedirs
+    with (
+        patch("saltext.freezer.modules.freezer.status", MagicMock(return_value=True)),
+        patch("os.makedirs", makedirs),
     ):
         with pytest.raises(CommandExecutionError):
             freezer.freeze()
@@ -94,14 +99,18 @@ def test_freeze_success_two_freeze():
     fopen = MagicMock()
     dump = MagicMock()
     makedirs = MagicMock()
-    with patch.dict(freezer.__salt__, salt_mock), patch(
-        "saltext.freezer.modules.freezer.status",
-        MagicMock(return_value=False),
-    ), patch("salt.utils.json.dump", dump), patch(
-        "saltext.freezer.modules.freezer.fopen",
-        fopen,
-    ), patch(
-        "os.makedirs", makedirs
+    with (
+        patch.dict(freezer.__salt__, salt_mock),
+        patch(
+            "saltext.freezer.modules.freezer.status",
+            MagicMock(return_value=False),
+        ),
+        patch("salt.utils.json.dump", dump),
+        patch(
+            "saltext.freezer.modules.freezer.fopen",
+            fopen,
+        ),
+        patch("os.makedirs", makedirs),
     ):
         assert freezer.freeze("one")
         assert freezer.freeze("two")
@@ -125,14 +134,18 @@ def test_freeze_success_new_state():
     fopen = MagicMock()
     dump = MagicMock()
     makedirs = MagicMock()
-    with patch.dict(freezer.__salt__, salt_mock), patch(
-        "saltext.freezer.modules.freezer.status",
-        MagicMock(return_value=False),
-    ), patch("salt.utils.json.dump", dump), patch(
-        "saltext.freezer.modules.freezer.fopen",
-        fopen,
-    ), patch(
-        "os.makedirs", makedirs
+    with (
+        patch.dict(freezer.__salt__, salt_mock),
+        patch(
+            "saltext.freezer.modules.freezer.status",
+            MagicMock(return_value=False),
+        ),
+        patch("salt.utils.json.dump", dump),
+        patch(
+            "saltext.freezer.modules.freezer.fopen",
+            fopen,
+        ),
+        patch("os.makedirs", makedirs),
     ):
         assert freezer.freeze()
         makedirs.assert_called_once()
@@ -154,14 +167,18 @@ def test_freeze_success_force():
     fopen = MagicMock()
     dump = MagicMock()
     makedirs = MagicMock()
-    with patch.dict(freezer.__salt__, salt_mock), patch(
-        "saltext.freezer.modules.freezer.status",
-        MagicMock(return_value=False),
-    ), patch("salt.utils.json.dump", dump), patch(
-        "saltext.freezer.modules.freezer.fopen",
-        fopen,
-    ), patch(
-        "os.makedirs", makedirs
+    with (
+        patch.dict(freezer.__salt__, salt_mock),
+        patch(
+            "saltext.freezer.modules.freezer.status",
+            MagicMock(return_value=False),
+        ),
+        patch("salt.utils.json.dump", dump),
+        patch(
+            "saltext.freezer.modules.freezer.fopen",
+            fopen,
+        ),
+        patch("os.makedirs", makedirs),
     ):
         assert freezer.freeze(force=True)
         makedirs.assert_called_once()
@@ -193,12 +210,17 @@ def test_restore_add_missing_repo():
     }
     fopen = MagicMock()
     load = MagicMock(side_effect=[{}, {"missing-repo": {}}])
-    with patch.dict(freezer.__salt__, salt_mock), patch(
-        "saltext.freezer.modules.freezer.status",
-        MagicMock(return_value=True),
-    ), patch("salt.utils.json.load", load), patch(
-        "saltext.freezer.modules.freezer.fopen",
-        fopen,
+    with (
+        patch.dict(freezer.__salt__, salt_mock),
+        patch(
+            "saltext.freezer.modules.freezer.status",
+            MagicMock(return_value=True),
+        ),
+        patch("salt.utils.json.load", load),
+        patch(
+            "saltext.freezer.modules.freezer.fopen",
+            fopen,
+        ),
     ):
         assert freezer.restore() == {
             "pkgs": {"add": [], "remove": []},
@@ -224,12 +246,17 @@ def test_restore_add_missing_package():
         "pkg.list_repos": MagicMock(return_value={}),
         "pkg.install": MagicMock(),
     }
-    with patch.dict(freezer.__salt__, salt_mock), patch(
-        "saltext.freezer.modules.freezer.status",
-        MagicMock(return_value=True),
-    ), patch("salt.utils.json.load", load), patch(
-        "saltext.freezer.modules.freezer.fopen",
-        fopen,
+    with (
+        patch.dict(freezer.__salt__, salt_mock),
+        patch(
+            "saltext.freezer.modules.freezer.status",
+            MagicMock(return_value=True),
+        ),
+        patch("salt.utils.json.load", load),
+        patch(
+            "saltext.freezer.modules.freezer.fopen",
+            fopen,
+        ),
     ):
         assert freezer.restore() == {
             "pkgs": {"add": ["missing-package"], "remove": []},
@@ -255,12 +282,17 @@ def test_restore_remove_extra_package():
     }
     fopen = MagicMock()
     load = MagicMock(side_effect=[{}, {}])
-    with patch.dict(freezer.__salt__, salt_mock), patch(
-        "saltext.freezer.modules.freezer.status",
-        MagicMock(return_value=True),
-    ), patch("salt.utils.json.load", load), patch(
-        "saltext.freezer.modules.freezer.fopen",
-        fopen,
+    with (
+        patch.dict(freezer.__salt__, salt_mock),
+        patch(
+            "saltext.freezer.modules.freezer.status",
+            MagicMock(return_value=True),
+        ),
+        patch("salt.utils.json.load", load),
+        patch(
+            "saltext.freezer.modules.freezer.fopen",
+            fopen,
+        ),
     ):
         assert freezer.restore() == {
             "pkgs": {"add": [], "remove": ["extra-package"]},
@@ -286,12 +318,17 @@ def test_restore_remove_extra_repo():
     }
     fopen = MagicMock()
     load = MagicMock(side_effect=[{}, {}])
-    with patch.dict(freezer.__salt__, salt_mock), patch(
-        "saltext.freezer.modules.freezer.status",
-        MagicMock(return_value=True),
-    ), patch("salt.utils.json.load", load), patch(
-        "saltext.freezer.modules.freezer.fopen",
-        fopen,
+    with (
+        patch.dict(freezer.__salt__, salt_mock),
+        patch(
+            "saltext.freezer.modules.freezer.status",
+            MagicMock(return_value=True),
+        ),
+        patch("salt.utils.json.load", load),
+        patch(
+            "saltext.freezer.modules.freezer.fopen",
+            fopen,
+        ),
     ):
         assert freezer.restore() == {
             "pkgs": {"add": [], "remove": []},
@@ -317,14 +354,18 @@ def test_restore_clean_yml():
     fopen = MagicMock()
     load = MagicMock()
     remove = MagicMock()
-    with patch.dict(freezer.__salt__, salt_mock), patch(
-        "saltext.freezer.modules.freezer.status",
-        MagicMock(return_value=True),
-    ), patch("salt.utils.json.load", load), patch(
-        "saltext.freezer.modules.freezer.fopen",
-        fopen,
-    ), patch(
-        "os.remove", remove
+    with (
+        patch.dict(freezer.__salt__, salt_mock),
+        patch(
+            "saltext.freezer.modules.freezer.status",
+            MagicMock(return_value=True),
+        ),
+        patch("salt.utils.json.load", load),
+        patch(
+            "saltext.freezer.modules.freezer.fopen",
+            fopen,
+        ),
+        patch("os.remove", remove),
     ):
         assert freezer.restore(clean=True) == {
             "pkgs": {"add": [], "remove": []},
